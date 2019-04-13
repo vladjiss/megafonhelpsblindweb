@@ -52,22 +52,19 @@
 		  		//$("#toolbar").text("Gaaf! De DeviceOrientationEvent API word door dit toestel ondersteund.");
 		  		window.addEventListener('deviceorientation', function(eventData) {
 					window.addEventListener('deviceorientation', function(eventData) {
-						$("#toolbar").text(eventData.alpha);
+						//$("#toolbar").text(eventData.alpha);
 						if(driver != null)
 							driver.properties.set('rotation', 180-eventData.alpha);
 					});
 				});
 			}
 		});
-		
+		setInterval(function(){
+			navigator.vibrate([500]);
+		}, 1000)
 		//var myMap;
 		ymaps.ready(['AnimatedLine']).then(function () {
 			navigator.geolocation.getCurrentPosition(showPosition);
-			
-			
-			
-			
-			
         
 		});
 		
