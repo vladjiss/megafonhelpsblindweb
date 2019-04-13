@@ -41,10 +41,10 @@
 		document.addEventListener("DOMContentLoaded", function(event) {
 
 			if (window.DeviceOrientationEvent) {
-		  		$("#toolbar").text("Gaaf! De DeviceOrientationEvent API word door dit toestel ondersteund.");
+		  		//$("#toolbar").text("Gaaf! De DeviceOrientationEvent API word door dit toestel ondersteund.");
 		  		window.addEventListener('deviceorientation', function(eventData) {
 					window.addEventListener('deviceorientation', function(eventData) {
-						//$("#toolbar").text(eventData.alpha);
+						$("#toolbar").text(eventData.alpha);
 						if(driver != null)
 							driver.properties.set('rotation', eventData.alpha);
 					});
