@@ -46,6 +46,8 @@
 	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=32850974-44c1-4f89-9d7a-f6a9ad82d03f" type="text/javascript"></script>
     <script>
 		var driver = null;
+		var direction = 0;
+		var current_direction = 0;
 		document.addEventListener("DOMContentLoaded", function(event) {
 
 			if (window.DeviceOrientationEvent) {
@@ -53,21 +55,45 @@
 		  		window.addEventListener('deviceorientation', function(eventData) {
 					window.addEventListener('deviceorientation', function(eventData) {
 						//$("#toolbar").text(eventData.alpha);
-						if(driver != null)
+						if(driver != null){
+							current_direction = eventData.alpha;
 							driver.properties.set('rotation', 180-eventData.alpha);
+						}
 					});
 				});
 			}
 		});
-		setInterval(function(){
-			navigator.vibrate([500]);
+		setInterval(function(){;
+			if(current_direction  > direction) {
+				var delta = current_direction - direction;
+				if(delta > 20 && delta < 180)
+					go_left();
+				if(delta < 340 && delta >= 180)
+					go_right();
+			} else  {
+				var delta = direction - current_direction;
+				if(delta > 20 && delta < 180)
+					go_right();
+				if(delta < 340 && delta >= 180)
+					go_left();
+			}
+			
 		}, 1000)
+		
+		function go_right(){
+			navigator.vibrate([100]);
+		}
+		function go_left(){
+			navigator.vibrate([100]);
+			setTimeout(function(){
+				navigator.vibrate([100]);
+			},200)
+		}
 		//var myMap;
 		ymaps.ready(['AnimatedLine']).then(function () {
 			navigator.geolocation.getCurrentPosition(showPosition);
         
 		});
-		
 		
 		
 		function showPosition(position){
