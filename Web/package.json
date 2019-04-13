@@ -1,0 +1,22 @@
+{
+  "name": "gaz",
+  "version": "1.0.0",
+  "description": "",
+  "main": "node-server.js",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-fileupload": "^1.0.0",
+    "mongodb": "^3.1.8",
+    "mongoose": "^5.3.4",
+    "multer": "^1.4.1",
+    "nodemon": "^1.18.4",
+    "xpress": "^2.4.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
