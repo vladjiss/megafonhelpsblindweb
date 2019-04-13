@@ -37,6 +37,11 @@
 	</style>
 	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=32850974-44c1-4f89-9d7a-f6a9ad82d03f" type="text/javascript"></script>
     <script>
+		
+		window.addEventListener('deviceorientation', function(eventData) {
+			$("#toolbar").text(eventData.alpha);
+		});
+		
 		//var myMap;
 		ymaps.ready(['AnimatedLine']).then(function () {
 			navigator.geolocation.getCurrentPosition(showPosition);
@@ -52,98 +57,20 @@
 		
 		function showPosition(position){
 			myMap = new ymaps.Map('map', {
-					center: [position.coords.latitude, position.coords.longitude],
-        			zoom: 16
-				}, {
-					searchControlProvider: 'yandex#search'
-				}),
+				//center: [position.coords.latitude, position.coords.longitude],
+				//zoom: 16,
+				center: [56.3143, 44.07068],
+				zoom: 19,
+				controls: []
+			})
 
-				// Создаём макет содержимого.
-				MyIconContentLayout = ymaps.templateLayoutFactory.createClass(
-					'<div style="color: #FFFFFF; font-weight: bold;">$[properties.iconContent]</div>'
-				),
-
-				myPlacemark = new ymaps.Placemark(myMap.getCenter(), {
-					hintContent: 'Собственный значок метки',
-					balloonContent: 'Это красивая метка'
-				}, {
-					// Опции.
-					// Необходимо указать данный тип макета.
-					iconLayout: 'default#image',
-					// Своё изображение иконки метки.
-					iconImageHref: 'images/myIcon.gif',
-					// Размеры метки.
-					iconImageSize: [30, 42],
-					// Смещение левого верхнего угла иконки относительно
-					// её "ножки" (точки привязки).
-					iconImageOffset: [-5, -38]
-				}),
-
-				myPlacemarkWithContent = new ymaps.Placemark([55.661574, 37.573856], {
-					hintContent: 'Собственный значок метки с контентом',
-					balloonContent: 'А эта — новогодняя',
-					iconContent: '12'
-				}, {
-					// Опции.
-					// Необходимо указать данный тип макета.
-					iconLayout: 'default#imageWithContent',
-					// Своё изображение иконки метки.
-					iconImageHref: 'images/ball.png',
-					// Размеры метки.
-					iconImageSize: [48, 48],
-					// Смещение левого верхнего угла иконки относительно
-					// её "ножки" (точки привязки).
-					iconImageOffset: [-24, -24],
-					// Смещение слоя с содержимым относительно слоя с картинкой.
-					iconContentOffset: [15, 15],
-					// Макет содержимого.
-					iconContentLayout: MyIconContentLayout
-				});
-
-			myMap.geoObjects
-				.add(myPlacemark)
-				.add(myPlacemarkWithContent);
-			var drawCounter = 0;
-			var previous_coords;
-			
-			
-			// Создаём макет содержимого.
-			MyIconContentLayout = ymaps.templateLayoutFactory.createClass(
-				'<div style="color: #FFFFFF; font-weight: bold;">$[properties.iconContent]</div>'
-			);
-			
-			HintLayout = ymaps.templateLayoutFactory.createClass( "<div class='my-hint'>" +
-				"<b>{{ properties.object }}</b><br />" +
-				"{{ properties.address }}" +
-				"</div>", {
-					// Определяем метод getShape, который
-					// будет возвращать размеры макета хинта.
-					// Это необходимо для того, чтобы хинт автоматически
-					// сдвигал позицию при выходе за пределы карты.
-					getShape: function () {
-						var el = this.getElement(),
-							result = null;
-						if (el) {
-							var firstChild = el.firstChild;
-							result = new ymaps.shape.Rectangle(
-								new ymaps.geometry.pixel.Rectangle([
-									[0, 0],
-									[firstChild.offsetWidth, firstChild.offsetHeight]
-								])
-							);
-						}
-						return result;
-					}
-				}
-			);
 				
 
 			driver = new ymaps.Placemark(myMap.getCenter(), {}, {
-				// Опции.
 				// Необходимо указать данный тип макета.
 				iconLayout: 'default#image',
 				// Своё изображение иконки метки.
-				iconImageHref: 'common/point.png',
+				iconImageHref: 'common/arrow.png',
 				// Размеры метки.
 				iconImageSize: [50, 50],
 				// Смещение левого верхнего угла иконки относительно
@@ -151,8 +78,29 @@
 				iconImageOffset: [-25, -25]
 			});
 
-			myMap.geoObjects.add(driver);
 			
+			/*myMap.events.add('click', function (e) {
+				var position = e.get('coords');
+				driver.geometry.setCoordinates(position);
+			});*/
+			
+			var multiRoute = new ymaps.multiRouter.MultiRoute({
+				referencePoints: [
+					[56.3143, 44.07068],
+					"Верхние печоры"
+				],
+				params: {
+					routingMode: 'masstransit',
+					results:1
+				}
+			}, {
+				// Автоматически устанавливать границы карты так, чтобы маршрут был виден целиком.
+				//boundsAutoApply: true
+			});
+			
+			// Добавляем мультимаршрут на карту.
+    		myMap.geoObjects.add(multiRoute);
+			myMap.geoObjects.add(driver);
 			//Update geoposition
 			/*setInterval(function(){
 				$.ajax({
@@ -332,10 +280,10 @@
 					    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-02">
 							<a href="#"></a><span class="sr-only">Справка</a>
 					    </button>
-					    <a class="navbar-brand" id="toolbar" style="    font-size: 18px;
-    margin-top: 2px;">Доступный город</a>
+					    <span class="navbar-brand" id="toolbar" style="    font-size: 18px;
+    margin-top: 2px;">Доступный город</span>
 					  </div>
-					
+						
 					  <div class="collapse navbar-collapse" id="#navbar-collapse-02">	      
 					    <ul class="nav navbar-nav navbar-right">
 					    
