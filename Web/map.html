@@ -34,6 +34,14 @@
             border-radius: 15px;
             font-family: Arial;
         }
+		.arrow-icon {
+			position: absolute;
+			width: 50px;
+			height: 50px;
+			background: url("common/arrow.png");
+			background-size: contain;
+			//transform-origin: 50% 72%;
+		}
 	</style>
 	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=32850974-44c1-4f89-9d7a-f6a9ad82d03f" type="text/javascript"></script>
     <script>
@@ -46,7 +54,7 @@
 					window.addEventListener('deviceorientation', function(eventData) {
 						$("#toolbar").text(eventData.alpha);
 						if(driver != null)
-							driver.properties.set('rotation', eventData.alpha);
+							driver.properties.set('rotation', eventData.alpha+180);
 					});
 				});
 			}
@@ -76,23 +84,21 @@
 
 				
 
-			driver = new ymaps.Placemark(myMap.getCenter(), {}, {
-				// Необходимо указать данный тип макета.
-				iconLayout: 'default#image',
-				// Своё изображение иконки метки.
-				iconImageHref: 'common/arrow.png',
-				// Размеры метки.
-				iconImageSize: [50, 50],
-				// Смещение левого верхнего угла иконки относительно
-				// её "ножки" (точки привязки).
-				iconImageOffset: [-25, -25]
+			driver = new ymaps.Placemark(myMap.getCenter(), {
+				rotation: 0
+			}, {
+				
+				iconOffset: [-25,-25],
+				iconLayout: ymaps.templateLayoutFactory.createClass('<ymaps class="arrow-icon" style="transform: rotate($[properties.rotation]deg);"/>')
 			});
 
 			
-			/*myMap.events.add('click', function (e) {
+			myMap.events.add('click', function (e) {
 				var position = e.get('coords');
-				driver.geometry.setCoordinates(position);
-			});*/
+				//driver.geometry.setCoordinates(position);
+				//driver.geometry.setCoordinates(position);
+				//driver.properties.set('rotation', 30);
+			});
 			
 			var multiRoute = new ymaps.multiRouter.MultiRoute({
 				referencePoints: [
