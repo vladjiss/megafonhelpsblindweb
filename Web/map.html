@@ -54,7 +54,7 @@
 					window.addEventListener('deviceorientation', function(eventData) {
 						$("#toolbar").text(eventData.alpha);
 						if(driver != null)
-							driver.properties.set('rotation', eventData.alpha+180);
+							driver.properties.set('rotation', 180-eventData.alpha);
 					});
 				});
 			}
