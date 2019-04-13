@@ -54,7 +54,7 @@
 		  		//$("#toolbar").text("Gaaf! De DeviceOrientationEvent API word door dit toestel ondersteund.");
 		  		window.addEventListener('deviceorientation', function(eventData) {
 					window.addEventListener('deviceorientation', function(eventData) {
-						//$("#toolbar").text(eventData.alpha);
+						$("#toolbar").text(eventData.alpha);
 						if(driver != null){
 							current_direction = eventData.alpha;
 							driver.properties.set('rotation', 180-eventData.alpha);
@@ -67,15 +67,15 @@
 			if(current_direction  > direction) {
 				var delta = current_direction - direction;
 				if(delta > 20 && delta < 180)
-					go_left();
-				if(delta < 340 && delta >= 180)
 					go_right();
+				if(delta < 340 && delta >= 180)
+					go_left();
 			} else  {
 				var delta = direction - current_direction;
 				if(delta > 20 && delta < 180)
-					go_right();
-				if(delta < 340 && delta >= 180)
 					go_left();
+				if(delta < 340 && delta >= 180)
+					go_right();
 			}
 			
 		}, 1000)
