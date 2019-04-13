@@ -37,14 +37,16 @@
 	</style>
 	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=32850974-44c1-4f89-9d7a-f6a9ad82d03f" type="text/javascript"></script>
     <script>
+		var driver = null;
 		document.addEventListener("DOMContentLoaded", function(event) {
 
 			if (window.DeviceOrientationEvent) {
-				alert(12);
 		  		$("#toolbar").text("Gaaf! De DeviceOrientationEvent API word door dit toestel ondersteund.");
 		  		window.addEventListener('deviceorientation', function(eventData) {
 					window.addEventListener('deviceorientation', function(eventData) {
-						$("#toolbar").text(eventData.alpha);
+						//$("#toolbar").text(eventData.alpha);
+						if(driver != null)
+							driver.properties.set('rotation', eventData.alpha);
 					});
 				});
 			}
