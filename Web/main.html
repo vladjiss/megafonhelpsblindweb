@@ -56,7 +56,8 @@
 		
 		
 		function Notification(msg){
-			$("body").append('<iframe src="https://tts.voicetech.yandex.net/generate?text='+encodeURIComponent(msg).replace(/'/g,"%27").replace(/"/g,"%22")+'&format=mp3&lang=ru-RU&speaker=alyss&emotion=good&key=069b6659-984b-4c5f-880e-aaedcfd84102" style="display:none"></iframe>');
+			$(".speech").remove();
+			$("body").append('<iframe class="speech" src="https://tts.voicetech.yandex.net/generate?text='+encodeURIComponent(msg).replace(/'/g,"%27").replace(/"/g,"%22")+'&format=mp3&lang=ru-RU&speaker=alyss&emotion=good&key=069b6659-984b-4c5f-880e-aaedcfd84102" style="display:none"></iframe>');
 		}
 		
 	</script>
@@ -131,7 +132,7 @@
   </head>
   <body style="
 			background: #34495e">
-  		<nav class="navbar navbar-inverse navbar-embossed navbar-lg" role="navigation" style="border-radius: 0px; margin-bottom: 0px; background: #34495e; position: fixed">
+  		<nav class="navbar navbar-inverse navbar-embossed navbar-lg" role="navigation" style="border-radius: 0px; margin-bottom: 0px; background: #34495e; position: fixed; width: 100%;">
 					  <div class="navbar-header" >
 					    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-02">
 							<a href="#"></a><span class="sr-only">Справка</a>
@@ -201,7 +202,18 @@
     <script src="flat_ui/js/application.js"></script>
 		<script>
 			$("#input").on("change", function(){
-				alert($("#input").val());
+				var val = $("#input").val().toLowerCase();
+				//alert(val);
+				if(val.indexOf("проложи")>=0 ||
+				  val.indexOf("маршрут")>=0 ||
+				  val.indexOf("путь")>=0 ){
+				   var q = val.split("до")[1];
+					//alert(q);
+					Notification("Маршрут до "+q);
+					setTimeout(function(){
+						location.href="map.html?q="+encodeURIComponent(q).replace(/'/g,"%27").replace(/"/g,"%22");
+					},6000);
+			   }
 			})
 		</script>
     
