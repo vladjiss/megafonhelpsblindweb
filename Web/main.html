@@ -43,10 +43,8 @@
 			//transform-origin: 50% 72%;
 		}
 	</style>
+	  
     <script>
-		var driver = null;
-		var direction = 333;
-		var current_direction = 0;
 		document.addEventListener("DOMContentLoaded", function(event) {
 
 			
@@ -57,10 +55,11 @@
 		
 		function Notification(msg){
 			$(".speech").remove();
-			$("body").append('<iframe class="speech" src="https://tts.voicetech.yandex.net/generate?text='+encodeURIComponent(msg).replace(/'/g,"%27").replace(/"/g,"%22")+'&format=mp3&lang=ru-RU&speaker=alyss&emotion=good&key=069b6659-984b-4c5f-880e-aaedcfd84102" style="display:none"></iframe>');
+			$("#body1").append('<iframe class="speech" src="https://tts.voicetech.yandex.net/generate?text='+encodeURIComponent(msg).replace(/'/g,"%27").replace(/"/g,"%22")+'&format=mp3&lang=ru-RU&speaker=alyss&emotion=good&key=069b6659-984b-4c5f-880e-aaedcfd84102" style="display:none"></iframe>');
 		}
 		
 	</script>
+	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=32850974-44c1-4f89-9d7a-f6a9ad82d03f" type="text/javascript"></script>
 	<script src="animated_line.js" type="text/javascript"></script>
 	<style>
         html, body, #map {
@@ -131,8 +130,8 @@
     </style>
   </head>
   <body style="
-			background: #34495e">
-  		<nav class="navbar navbar-inverse navbar-embossed navbar-lg" role="navigation" style="border-radius: 0px; margin-bottom: 0px; background: #34495e; position: fixed; width: 100%;">
+			background: #34495e" >
+  		<nav class="navbar navbar-inverse navbar-embossed navbar-lg" role="navigation" style="border-radius: 0px; margin-bottom: 0px; background: #34495e; position: fixed; width: 100%; z-index: 9999">
 					  <div class="navbar-header" >
 					    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-02">
 							<a href="#"></a><span class="sr-only">Справка</a>
@@ -149,7 +148,7 @@
 					  </div><!-- /.navbar-collapse -->
 					</nav>
    
-	<div class="content" style="padding: 68px 0 110px 0">
+	<div class="content" style="padding: 68px 0 110px 0" id="body1">
 		<button style="background: none;border: none;color: #fff;font-size: 25px;padding: 25px 25px;margin:0;width: 100%;" onClick="$('#input').focus()" >
 			<img width="50" src="common/search.png" style="margin-right: 30px;margin-top: -5px;float: left;"><span style="
     float: left;
@@ -173,9 +172,7 @@
     float: left;
 ">Настройки</span>
 		</button>
-		
- 	</div>
-	<div style="position: fixed; width: 100%; height: 110px; bottom: 0; background: #34495e;"></div>
+		<div style="position: fixed; width: 100%; height: 110px; bottom: 0; background: #34495e;"></div>
 	<a id="microphone" href="map.html" style="position: fixed; right: 20px; bottom: 20px"><img alt="Набор текста" onClick="$('#input').focus()" style="width:80px;height: 80px" src="common/microphone.png"></a>
 		
 		<textarea rows="3" id="input" style="background: none;
@@ -186,7 +183,16 @@
     width: 60%;
     color: #fff;
     font-size: 15px;background: #34495e;"></textarea>
-                    <!-- Load JS here for greater good =============================-->
+ 	</div>
+	
+                   
+    
+  		
+	<div class="content" style="display: none; height: 100%" id="body2">
+		<div id="map"></div> 
+ 	</div>
+	
+	<!-- Load JS here for greater good =============================-->
     <script src="flat_ui/js/jquery-1.8.3.min.js"></script>
     <script src="flat_ui/js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="flat_ui/js/jquery.ui.touch-punch.min.js"></script>
@@ -218,11 +224,134 @@
 						//$("#microphone").attr("href","map.html?q="+encodeURIComponent(q).replace(/'/g,"%27").replace(/"/g,"%22"));
 						//$("#microphone").click();
 						//$("#microphone").trigger("click");
-						location.href="https://gitcdn.xyz/cdn/vladjiss/megafonhelpsblindweb/b317c4f76cce4080c230e16f1bbcb2c99d51ebc5/Web/map.html?q="+encodeURIComponent(q).replace(/'/g,"%27").replace(/"/g,"%22");
+						//location.href="https://gitcdn.xyz/cdn/vladjiss/megafonhelpsblindweb/b317c4f76cce4080c230e16f1bbcb2c99d51ebc5/Web/map.html?q="+encodeURIComponent(q).replace(/'/g,"%27").replace(/"/g,"%22");
+						//$("body").html("<iframe src='https://gitcdn.xyz/cdn/vladjiss/megafonhelpsblindweb/b317c4f76cce4080c230e16f1bbcb2c99d51ebc5/Web/map.html' style='width:100%;height:100%; border:none'></iframe>");
+						//$("body").css("overflow", "hidden");
+						navigator.geolocation.getCurrentPosition(showPosition);
+						$("#body1").css("display", "none");
+						$("#body2").css("display", "block");
+						check_direction = true;
 					},6000);
 			   }
 			})
-		</script>
-    
-  </body>
+			
+			
+		var driver = null;
+		var direction = 333;
+		var current_direction = 0;
+		var check_direction = false;
+		var q = "Нижний Новгород, ";
+		document.addEventListener("DOMContentLoaded", function(event) {
+
+			if (window.DeviceOrientationEvent) {
+		  		//$("#toolbar").text("Gaaf! De DeviceOrientationEvent API word door dit toestel ondersteund.");
+		  		window.addEventListener('deviceorientation', function(eventData) {
+					window.addEventListener('deviceorientation', function(eventData) {
+						$("#toolbar").text(eventData.alpha);
+						if(driver != null){
+							//current_direction = 360-eventData.alpha;
+							driver.properties.set('rotation', 180-eventData.alpha);
+						}
+					});
+				});
+			}
+			
+			//Notification("Добро пожаловать в приложение Доступный город! Меня зовут голосовой ассистент Алиса! Я помогу проложить оптимальный маршрут до любой точки города, добраться до ближайшей остановки и сообщу вам о приближении нужных транспортных средств!");
+			//
+		});
+		setInterval(function(){
+			if(check_direction){
+				if(current_direction  > direction) {
+					var delta = current_direction - direction;
+					if(delta > 20 && delta < 180)
+						go_left();
+					if(delta < 340 && delta >= 180)
+						go_right();
+				} else  {
+					var delta = direction - current_direction;
+					if(delta > 20 && delta < 180)
+						go_right();
+					if(delta < 340 && delta >= 180)
+						go_left();
+				}
+			}
+		}, 1000);
+		
+		function go_right(){
+			navigator.vibrate([100]);
+		}
+		function go_left(){
+			navigator.vibrate([100]);
+			setTimeout(function(){
+				navigator.vibrate([100]);
+			},150)
+		}
+		//var myMap;
+		ymaps.ready(['AnimatedLine']).then(function () {
+			//alert(123);
+			//navigator.geolocation.getCurrentPosition(showPosition);
+        
+		});
+		
+		
+		function showPosition(position){
+			myMap = new ymaps.Map('map', {
+				//center: [position.coords.latitude, position.coords.longitude],
+				//zoom: 16,
+				center: [56.3143, 44.07068],
+				zoom: 19,
+				controls: []
+			})
+
+				
+
+			driver = new ymaps.Placemark(myMap.getCenter(), {
+				rotation: 0
+			}, {
+				
+				iconOffset: [-25,-25],
+				iconLayout: ymaps.templateLayoutFactory.createClass('<ymaps class="arrow-icon" style="transform: rotate($[properties.rotation]deg);"/>')
+			});
+
+			
+			myMap.events.add('click', function (e) {
+				var position = e.get('coords');
+				//driver.geometry.setCoordinates(position);
+				//driver.geometry.setCoordinates(position);
+				//driver.properties.set('rotation', 30);
+			});
+			
+			var multiRoute = new ymaps.multiRouter.MultiRoute({
+				referencePoints: [
+					[56.3143, 44.07068],
+					q
+				],
+				params: {
+					routingMode: 'masstransit',
+					results:1
+				}
+			}, {
+				// Автоматически устанавливать границы карты так, чтобы маршрут был виден целиком.
+				//boundsAutoApply: true
+			});
+			
+			
+			multiRoute.model.events.add('requestsuccess', function() {
+				// Получение информации об активном маршруте.
+				var activeRoute = multiRoute.getActiveRoute();
+				// Получение коллекции путей маршрута.
+				var distance = activeRoute.getPaths().get(0).properties.get("distance").text; 
+				var duration = activeRoute.getPaths().get(0).properties.get("duration").text; 
+				//alert(distance);
+				Notification("Маршрут построен, время в пути составит "+duration+", длина маршрюта "+distance+", Ближайшая остановка – 'Медвежья долина', находится на расстоянии 130 метров");
+			});
+			// Добавляем мультимаршрут на карту.
+    		myMap.geoObjects.add(multiRoute);
+			myMap.geoObjects.add(driver);
+			
+		}
+		
+	</script>
+	  
+	</body>
 </html>
