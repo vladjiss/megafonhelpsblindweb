@@ -176,7 +176,8 @@
 		
  	</div>
 	<div style="position: fixed; width: 100%; height: 110px; bottom: 0; background: #34495e;"></div>
-	<a href="map.html" style="position: fixed; right: 20px; bottom: 20px"><img alt="Набор текста" onClick="$('#input').focus()" style="width:80px;height: 80px" src="common/microphone.png"</a>
+	<a id="microphone" href="map.html" style="position: fixed; right: 20px; bottom: 20px"><img alt="Набор текста" onClick="$('#input').focus()" style="width:80px;height: 80px" src="common/microphone.png"></a>
+		
 		<textarea rows="3" id="input" style="background: none;
     border: none;
     position: fixed;
@@ -213,7 +214,8 @@
 					setTimeout(function(){
 						//document.location = ;
 						//window.open("map.html?q="+encodeURIComponent(q).replace(/'/g,"%27").replace(/"/g,"%22"), '_system')
-						window.location.assign("map.html?q="+encodeURIComponent(q).replace(/'/g,"%27").replace(/"/g,"%22"))
+						//window.location.assign("map.html?q="+encodeURIComponent(q).replace(/'/g,"%27").replace(/"/g,"%22"))
+						$("#microphone").attr("href","map.html?q="+encodeURIComponent(q).replace(/'/g,"%27").replace(/"/g,"%22"));
 					},6000);
 			   }
 			})
