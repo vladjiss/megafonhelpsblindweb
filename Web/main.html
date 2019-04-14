@@ -49,7 +49,10 @@
 
 			
 			
-			Notification("Добро пожаловать в приложение Доступный город! Меня зовут голосовой ассистент Алиса! Я помогу проложить оптимальный маршрут до любой точки города, добраться до ближайшей остановки и сообщу вам о приближении нужных транспортных средств!");
+			setTimeout(function(){
+				
+				Notification("Добро пожаловать в приложение Доступный город! Меня зовут голосовой ассистент Алиса! Я помогу проложить оптимальный маршрут до любой точки города, добраться до ближайшей остановки и сообщу вам о приближении нужных транспортных средств!");
+			},5000)
 		});
 		
 		
@@ -238,7 +241,7 @@
 			
 			
 		var driver = null;
-		var direction = 333;
+		var direction = 300;
 		var current_direction = 0;
 		var check_direction = false;
 		var q = "Нижний Новгород, ";
@@ -316,7 +319,8 @@
 
 			
 			myMap.events.add('click', function (e) {
-				var position = e.get('coords');
+				//var position = e.get('coords');
+				change_geolocation(e);
 				//driver.geometry.setCoordinates(position);
 				//driver.geometry.setCoordinates(position);
 				//driver.properties.set('rotation', 30);
@@ -349,7 +353,24 @@
 			// Добавляем мультимаршрут на карту.
     		myMap.geoObjects.add(multiRoute);
 			myMap.geoObjects.add(driver);
+			setInterval(function(){
+				navigator.geolocation.getCurrentPosition(change_geolocation);
+			}, 1000);
+		}
 			
+		function change_geolocation(position){
+			//alert(123);
+			driver.geometry.setCoordinates([position.coords.latitude, position.coords.longitude]);
+			myMap.panTo(
+				// Координаты нового центра карты
+				[position.coords.latitude, position.coords.longitude], {
+					/* Опции перемещения:
+					   разрешить уменьшать и затем увеличивать зум
+					   карты при перемещении между точками 
+					*/
+					flying: true
+				}
+			)
 		}
 		
 	</script>
