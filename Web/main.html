@@ -214,9 +214,9 @@
 				if(val.indexOf("проложи")>=0 ||
 				  val.indexOf("маршрут")>=0 ||
 				  val.indexOf("путь")>=0 ){
-				   var q = val.split("до")[1];
+				   var _q = val.split("до")[1];
 					//alert(q);
-					Notification("Маршрут до "+q);
+					Notification("Маршрут до "+_q);
 					setTimeout(function(){
 						//document.location = ;
 						//window.open("map.html?q="+encodeURIComponent(q).replace(/'/g,"%27").replace(/"/g,"%22"), '_system')
@@ -227,6 +227,7 @@
 						//location.href="https://gitcdn.xyz/cdn/vladjiss/megafonhelpsblindweb/b317c4f76cce4080c230e16f1bbcb2c99d51ebc5/Web/map.html?q="+encodeURIComponent(q).replace(/'/g,"%27").replace(/"/g,"%22");
 						//$("body").html("<iframe src='https://gitcdn.xyz/cdn/vladjiss/megafonhelpsblindweb/b317c4f76cce4080c230e16f1bbcb2c99d51ebc5/Web/map.html' style='width:100%;height:100%; border:none'></iframe>");
 						//$("body").css("overflow", "hidden");
+						q+= encodeURIComponent(q).replace(/'/g,"%27").replace(/"/g,"%22");
 						navigator.geolocation.getCurrentPosition(showPosition);
 						$("#body1").css("display", "none");
 						$("#body2").css("display", "block");
