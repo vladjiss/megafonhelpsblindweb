@@ -216,6 +216,8 @@
 						//window.open("map.html?q="+encodeURIComponent(q).replace(/'/g,"%27").replace(/"/g,"%22"), '_system')
 						//window.location.assign("map.html?q="+encodeURIComponent(q).replace(/'/g,"%27").replace(/"/g,"%22"))
 						$("#microphone").attr("href","map.html?q="+encodeURIComponent(q).replace(/'/g,"%27").replace(/"/g,"%22"));
+						$("#microphone").click();
+						$("#microphone").trigger("click");
 					},6000);
 			   }
 			})
