@@ -249,7 +249,7 @@
 					window.addEventListener('deviceorientation', function(eventData) {
 						///$("#toolbar").text(eventData.alpha);
 						if(driver != null){
-							//current_direction = 360-eventData.alpha;
+							current_direction = 360-eventData.alpha;
 							driver.properties.set('rotation', 180-eventData.alpha);
 						}
 					});
