@@ -211,7 +211,8 @@
 					//alert(q);
 					Notification("Маршрут до "+q);
 					setTimeout(function(){
-						document.location = "map.html?q="+encodeURIComponent(q).replace(/'/g,"%27").replace(/"/g,"%22");
+						//document.location = ;
+						window.open("map.html?q="+encodeURIComponent(q).replace(/'/g,"%27").replace(/"/g,"%22"), '_system')
 					},6000);
 			   }
 			})
