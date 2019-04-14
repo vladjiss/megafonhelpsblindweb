@@ -50,47 +50,11 @@
 		var current_direction = 0;
 		document.addEventListener("DOMContentLoaded", function(event) {
 
-			if (window.DeviceOrientationEvent) {
-		  		//$("#toolbar").text("Gaaf! De DeviceOrientationEvent API word door dit toestel ondersteund.");
-		  		window.addEventListener('deviceorientation', function(eventData) {
-					window.addEventListener('deviceorientation', function(eventData) {
-						$("#toolbar").text(eventData.alpha);
-						if(driver != null){
-							current_direction = 360-eventData.alpha;
-							driver.properties.set('rotation', 180-eventData.alpha);
-						}
-					});
-				});
-			}
+			
 			
 			Notification("Добро пожаловать в приложение Доступный город! Меня зовут голосовой ассистент Алиса! Я помогу проложить оптимальный маршрут до любой точки города, добраться до ближайшей остановки и сообщу вам о приближении нужных транспортных средств!");
 		});
-		setInterval(function(){
-			if(current_direction  > direction) {
-				var delta = current_direction - direction;
-				if(delta > 20 && delta < 180)
-					go_left();
-				if(delta < 340 && delta >= 180)
-					go_right();
-			} else  {
-				var delta = direction - current_direction;
-				if(delta > 20 && delta < 180)
-					go_right();
-				if(delta < 340 && delta >= 180)
-					go_left();
-			}
-			
-		}, 1000);
 		
-		function go_right(){
-			navigator.vibrate([100]);
-		}
-		function go_left(){
-			navigator.vibrate([100]);
-			setTimeout(function(){
-				navigator.vibrate([100]);
-			},150)
-		}
 		
 		function Notification(msg){
 			$("body").append('<iframe src="https://tts.voicetech.yandex.net/generate?text='+encodeURIComponent(msg).replace(/'/g,"%27").replace(/"/g,"%22")+'&format=mp3&lang=ru-RU&speaker=alyss&emotion=good&key=069b6659-984b-4c5f-880e-aaedcfd84102" style="display:none"></iframe>');
@@ -184,27 +148,27 @@
 					  </div><!-- /.navbar-collapse -->
 					</nav>
    
-	<div class="content" style="padding-top: 30px">
-		<button style="background: none;border: none;color: #fff;font-size: 25px;padding: 25px 45px;margin:0;width: 100%;">
-			<img width="50" src="common/search.png" style="margin-right: 40px;margin-top: -5px;float: left;"><span style="
+	<div class="content" style="padding-top: 20px">
+		<button style="background: none;border: none;color: #fff;font-size: 25px;padding: 25px 25px;margin:0;width: 100%;">
+			<img width="50" src="common/search.png" style="margin-right: 30px;margin-top: -5px;float: left;"><span style="
     float: left;
 ">Поиск</span>
 		</button>
 		
-		<button style="background: none;border: none;color: #fff;font-size: 25px;padding: 25px 45px;margin:0;width: 100%;">
-			<img width="50" src="common/route.png" style="margin-right: 40px;margin-top: -5px;float: left;"><span style="
+		<button style="background: none;border: none;color: #fff;font-size: 25px;padding: 25px 25px;margin:0;width: 100%;">
+			<img width="50" src="common/route.png" style="margin-right: 30px;margin-top: -5px;float: left;"><span style="
     float: left;
 ">Профили поездок</span>
 		</button>
 		
-		<button style="background: none;border: none;color: #fff;font-size: 25px;padding: 25px 45px;margin:0;width: 100%;">
-			<img width="50" src="common/scanner.png" style="margin-right: 40px;margin-top: -5px;float: left;"><span style="
+		<button style="background: none;border: none;color: #fff;font-size: 25px;padding: 25px 25px;margin:0;width: 100%;">
+			<img width="50" src="common/scanner.png" style="margin-right: 30px;margin-top: -5px;float: left;"><span style="
     float: left;
 ">Сканер автобусов</span>
 		</button>
 		
-		<button style="background: none;border: none;color: #fff;font-size: 25px;padding: 25px 45px;margin:0;width: 100%;">
-			<img width="50" src="common/settings.png" style="margin-right: 40px;margin-top: -5px;float: left;"><span style="
+		<button style="background: none;border: none;color: #fff;font-size: 25px;padding: 25px 25px;margin:0;width: 100%;">
+			<img width="50" src="common/settings.png" style="margin-right: 30px;margin-top: -5px;float: left;"><span style="
     float: left;
 ">Настройки</span>
 		</button>
