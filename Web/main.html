@@ -173,7 +173,7 @@
 ">Настройки</span>
 		</button>
 		<div style="position: fixed; width: 100%; height: 110px; bottom: 0; background: #34495e;"></div>
-	<a id="microphone" href="map.html" style="position: fixed; right: 20px; bottom: 20px"><img alt="Набор текста" onClick="$('#input').focus()" style="width:80px;height: 80px" src="common/microphone.png"></a>
+	<a id="microphone" href="#" style="position: fixed; right: 20px; bottom: 20px"><img alt="Набор текста" onClick="$('#input').focus()" style="width:80px;height: 80px" src="common/microphone.png"></a>
 		
 		<textarea rows="3" id="input" style="background: none;
     border: none;
@@ -247,7 +247,7 @@
 		  		//$("#toolbar").text("Gaaf! De DeviceOrientationEvent API word door dit toestel ondersteund.");
 		  		window.addEventListener('deviceorientation', function(eventData) {
 					window.addEventListener('deviceorientation', function(eventData) {
-						$("#toolbar").text(eventData.alpha);
+						///$("#toolbar").text(eventData.alpha);
 						if(driver != null){
 							//current_direction = 360-eventData.alpha;
 							driver.properties.set('rotation', 180-eventData.alpha);
