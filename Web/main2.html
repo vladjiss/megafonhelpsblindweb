@@ -314,7 +314,7 @@
 			
 			myMap.events.add('click', function (e) {
 				//var position = e.get('coords');
-				change_geolocation(e);
+				//change_geolocation(e);
 				//driver.geometry.setCoordinates(position);
 				//driver.geometry.setCoordinates(position);
 				//driver.properties.set('rotation', 30);
@@ -347,9 +347,11 @@
 			// Добавляем мультимаршрут на карту.
     		myMap.geoObjects.add(multiRoute);
 			myMap.geoObjects.add(driver);
-			setInterval(function(){
-				navigator.geolocation.getCurrentPosition(change_geolocation);
-			}, 1000);
+			setTimeout(function(){
+				setInterval(function(){
+					navigator.geolocation.getCurrentPosition(change_geolocation);
+				}, 1000);
+			},60000)
 		}
 			
 		function change_geolocation(position){
