@@ -294,7 +294,7 @@
 			myMap = new ymaps.Map('map', {
 				//center: [position.coords.latitude, position.coords.longitude],
 				//zoom: 16,
-				center: [56.3143, 44.07068],
+				center: [56.33039666, 43.99257019],
 				zoom: 19,
 				controls: []
 			})
@@ -320,7 +320,7 @@
 			
 			var multiRoute = new ymaps.multiRouter.MultiRoute({
 				referencePoints: [
-					[56.3143, 44.07068],
+					[56.33039666, 43.99257019],
 					q
 				],
 				params: {
@@ -340,7 +340,7 @@
 				var distance = activeRoute.getPaths().get(0).properties.get("distance").text; 
 				var duration = activeRoute.getPaths().get(0).properties.get("duration").text; 
 				//alert(distance);
-				Notification("Маршрут построен, время в пути составит "+duration+", длина маршрюта "+distance+", Ближайшая остановка – 'Медвежья долина', находится на расстоянии 130 метров");
+				//Notification("Маршрут построен, время в пути составит "+duration+", длина маршрюта "+distance+", Ближайшая остановка – 'Медвежья долина', находится на расстоянии 130 метров");
 			});
 			// Добавляем мультимаршрут на карту.
     		myMap.geoObjects.add(multiRoute);
