@@ -211,6 +211,12 @@
     <script src="flat_ui/js/typeahead.js"></script>
     <script src="flat_ui/js/application.js"></script>
 		<script>
+			
+			var driver = null;
+			var direction = 0;
+			var current_direction = 0;
+			var check_direction = false;
+			var q = "Нижний Новгород, ";
 			function getParameterByName(name, url) {
 				if(!url) url = window.location.href;
 				name = name.replace(/[\[\]]/g, "\\$&");
@@ -222,21 +228,17 @@
 			}
 			$("#body1").css("display", "none");
 			$("#body2").css("display", "block");
-			if(getParameterByName("q")!=""){
-				_q = getParameterByName("q");
+			//if(getParameterByName("q")!=""){
+				//_q = getParameterByName("q");
+				_q = "сенная площадь"
 				//alert(_q);
 				q += _q;
 				navigator.geolocation.getCurrentPosition(showPosition);
 				check_direction = true;
 			   
-			}
+			//}
 			
 			
-		var driver = null;
-		var direction = 0;
-		var current_direction = 0;
-		var check_direction = false;
-		var q = "Нижний Новгород, ";
 		document.addEventListener("DOMContentLoaded", function(event) {
 
 			if (window.DeviceOrientationEvent) {
