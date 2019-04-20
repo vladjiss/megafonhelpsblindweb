@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Доступный город</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Loading Bootstrap -->
+    <link href="flat_ui/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="flat_ui/css/flat-ui.css" rel="stylesheet">
+    <link href="flat_ui/css/demo.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="flat_ui/dist/img/favicon.ico">  
+	  
+    <style>
+		.content{
+			padding:0px;
+		}
+		.my-hint {
+            display: inline-block;
+            padding: 20px;
+            height: auto;
+            position: relative;
+            left: -10px;
+            width: 300px;
+            font-size: 16px;
+            line-height: 25px;
+            color: #333333;
+            text-align: center;
+            vertical-align: middle;
+            background-color: #fff;
+            border-radius: 15px;
+            font-family: Arial;
+        }
+		.arrow-icon {
+			position: absolute;
+			width: 50px;
+			height: 50px;
+			background: url("common/arrow.png");
+			background-size: contain;
+			//transform-origin: 50% 72%;
+		}
+	</style>
+	  
+    <script>
+		document.addEventListener("DOMContentLoaded", function(event) {
+
+			
+			
+			setTimeout(function(){
+				
+				//Notification("Добро пожаловать в приложение Доступный город! Меня зовут голосовой ассистент Алиса! Я помогу проложить оптимальный маршрут до любой точки города, добраться до ближайшей остановки и сообщу вам о приближении нужных транспортных средств!");
+			},5000)
+		});
+		
+		
+		function Notification(msg){
+			$(".speech").remove();
+			$("#body1").append('<iframe class="speech" src="https://tts.voicetech.yandex.net/generate?text='+encodeURIComponent(msg).replace(/'/g,"%27").replace(/"/g,"%22")+'&format=mp3&lang=ru-RU&speaker=alyss&emotion=good&key=069b6659-984b-4c5f-880e-aaedcfd84102" style="display:none"></iframe>');
+		}
+		
+	</script>
+	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=32850974-44c1-4f89-9d7a-f6a9ad82d03f" type="text/javascript"></script>
+	<script src="animated_line.js" type="text/javascript"></script>
+	<style>
+        html, body, #map {
+            width: 100%; height: 100%; padding: 0; margin: 0;
+        }
+		.buttons {
+			box-shadow: 0 1px 2px 1px rgba(0,0,0,.15), 0 2px 5px -3px rgba(0,0,0,.15);
+			border-radius: 3px;
+			border-top-left-radius: 3px;
+			border-top-right-radius: 3px;
+			border-bottom-right-radius: 3px;
+			border-bottom-left-radius: 3px;
+			width: 200px;
+			height: 50px;
+			position: absolute;
+			left: 10px;
+			bottom: 10px;
+			z-index: 1;
+			background: #fff;
+			padding: 10px 15px;
+		}
+		.floating_title {
+			font-size: 18px;
+		}
+		.indicators {
+			position: absolute;
+			left: 10px;
+			bottom: 70px;
+			z-index: 1;
+			padding: 10px 15px;
+		}
+		.indicators > img {
+			width: 30px;
+			margin-right: 15px
+		}
+		#navigator {
+			position: absolute;
+			right: 50px;
+			bottom: 50px;
+			z-index: 1;
+			width: 50px;
+		}
+		#qr {
+			position: absolute;
+			right: 150px;
+			bottom: 50px;
+			z-index: 1;
+			width: 50px;
+		}
+		.sr-only {
+			position: relative;
+			color: #fff;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: 0;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			border: 0;
+		}
+		.navbar-toggle:before {
+		display: none;
+		}
+		/*.navbar-toggle:before {
+			color: #5E7293;
+			content: "\f05a";
+		}*/
+    </style>
+  </head>
+  <body style="
+			background: #34495e" >
+  		<nav class="navbar navbar-inverse navbar-embossed navbar-lg" role="navigation" style="border-radius: 0px; margin-bottom: 0px; background: #34495e; position: fixed; width: 100%; z-index: 9999">
+					  <div class="navbar-header" >
+					    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-02">
+							<a href="#"></a><span class="sr-only">Справка</a>
+					    </button>
+					    <span class="navbar-brand" id="toolbar" style="    font-size: 18px;
+    margin-top: 2px;">Доступный город</span>
+					  </div>
+						
+					  <div class="collapse navbar-collapse" id="#navbar-collapse-02">	      
+					    <ul class="nav navbar-nav navbar-right">
+					    
+					      <li><a href="#"><span class="visible-sm visible-xs"><span class="fui-gear"></span></span><span class="visible-md visible-lg">Справка</span></a></li>
+					    </ul>
+					  </div><!-- /.navbar-collapse -->
+					</nav>
+   
+	<div class="content" style="padding: 68px 0 110px 0" id="body1">
+		<button style="background: none;border: none;color: #fff;font-size: 25px;padding: 25px 25px;margin:0;width: 100%;" onClick="$('#input').focus()" >
+			<img width="50" src="common/search.png" style="margin-right: 30px;margin-top: -5px;float: left;"><span style="
+    float: left;
+">Поиск</span>
+		</button>
+		
+		<button style="background: none;border: none;color: #fff;font-size: 25px;padding: 25px 25px;margin:0;width: 100%;">
+			<img width="50" src="common/route.png" style="margin-right: 30px;margin-top: -5px;float: left;"><span style="
+    float: left;
+">Избранное</span>
+		</button>
+		
+		<button style="background: none;border: none;color: #fff;font-size: 25px;padding: 25px 25px;margin:0;width: 100%;">
+			<img width="50" src="common/scanner.png" style="margin-right: 30px;margin-top: -5px;float: left;"><span style="
+    float: left;
+">Сканер транспорта</span>
+		</button>
+		
+		<button style="background: none;border: none;color: #fff;font-size: 25px;padding: 25px 25px;margin:0;width: 100%;">
+			<img width="50" src="common/settings.png" style="margin-right: 30px;margin-top: -5px;float: left;"><span style="
+    float: left;
+">Настройки</span>
+		</button>
+		<div style="position: fixed; width: 100%; height: 110px; bottom: 0; background: #34495e;"></div>
+	<a id="microphone" href="#" style="position: fixed; right: 20px; bottom: 20px"><img alt="Набор текста" onClick="$('#input').focus()" style="width:80px;height: 80px" src="common/microphone.png"></a>
+		
+		<textarea rows="3" id="input" style="background: none;
+    border: none;
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    width: 60%;
+    color: #fff;
+    font-size: 15px;background: #34495e;"></textarea>
+ 	</div>
+	
+                   
+    
+  		
+	<div class="content" style="display: none; height: 100%" id="body2">
+		<div id="map"></div> 
+ 	</div>
+	
+	<!-- Load JS here for greater good =============================-->
+    <script src="flat_ui/js/jquery-1.8.3.min.js"></script>
+    <script src="flat_ui/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="flat_ui/js/jquery.ui.touch-punch.min.js"></script>
+    <script src="flat_ui/js/bootstrap.min.js"></script>
+    <script src="flat_ui/js/bootstrap-select.js"></script>
+    <script src="flat_ui/js/bootstrap-switch.js"></script>
+    <script src="flat_ui/js/flatui-checkbox.js"></script>
+    <script src="flat_ui/js/flatui-radio.js"></script>
+    <script src="flat_ui/js/holder.js"></script>
+    <script src="flat_ui/js/flatui-fileinput.js"></script>
+    <script src="flat_ui/js/jquery.tagsinput.js"></script>
+    <script src="flat_ui/js/jquery.placeholder.js"></script>
+    <script src="flat_ui/js/typeahead.js"></script>
+    <script src="flat_ui/js/application.js"></script>
+		<script>
+			function getParameterByName(name, url) {
+				if(!url) url = window.location.href;
+				name = name.replace(/[\[\]]/g, "\\$&");
+				var regex = new RegExp("[?&]" + name +"(=([^&#]*)|&|#|$)"),
+					result = regex.exec(url);
+					if(!result) return null;
+					if(!result[2]) return '';
+				return decodeURIComponent(result[2].replace(/\+/g, ""));
+			}
+			$("#body1").css("display", "none");
+			$("#body2").css("display", "block");
+			if(getParameterByName("q")!=""){
+				_q = getParameterByName("q");
+				//alert(_q);
+				q += _q;
+				navigator.geolocation.getCurrentPosition(showPosition);
+				check_direction = true;
+			   
+			}
+			
+			
+		var driver = null;
+		var direction = 0;
+		var current_direction = 0;
+		var check_direction = false;
+		var q = "Нижний Новгород, ";
+		document.addEventListener("DOMContentLoaded", function(event) {
+
+			if (window.DeviceOrientationEvent) {
+		  		//$("#toolbar").text("Gaaf! De DeviceOrientationEvent API word door dit toestel ondersteund.");
+		  		window.addEventListener('deviceorientation', function(eventData) {
+					window.addEventListener('deviceorientation', function(eventData) {
+						///$("#toolbar").text(eventData.alpha);
+						if(driver != null){
+							current_direction = 360-eventData.alpha;
+							driver.properties.set('rotation', 180-eventData.alpha);
+						}
+					});
+				});
+			}
+			
+			//Notification("Добро пожаловать в приложение Доступный город! Меня зовут голосовой ассистент Алиса! Я помогу проложить оптимальный маршрут до любой точки города, добраться до ближайшей остановки и сообщу вам о приближении нужных транспортных средств!");
+			//
+		});
+		setInterval(function(){
+			if(check_direction){
+				if(current_direction  > direction) {
+					var delta = current_direction - direction;
+					if(delta > 20 && delta < 180)
+						go_left();
+					if(delta < 340 && delta >= 180)
+						go_right();
+				} else  {
+					var delta = direction - current_direction;
+					if(delta > 20 && delta < 180)
+						go_right();
+					if(delta < 340 && delta >= 180)
+						go_left();
+				}
+			}
+		}, 1000);
+		
+		function go_right(){
+			navigator.vibrate([100]);
+		}
+		function go_left(){
+			navigator.vibrate([100]);
+			setTimeout(function(){
+				navigator.vibrate([100]);
+			},150)
+		}
+		//var myMap;
+		ymaps.ready(['AnimatedLine']).then(function () {
+			//alert(123);
+			//navigator.geolocation.getCurrentPosition(showPosition);
+        
+		});
+		
+		
+		function showPosition(position){
+			myMap = new ymaps.Map('map', {
+				//center: [position.coords.latitude, position.coords.longitude],
+				//zoom: 16,
+				center: [56.3143, 44.07068],
+				zoom: 19,
+				controls: []
+			})
+
+				
+
+			driver = new ymaps.Placemark(myMap.getCenter(), {
+				rotation: 0
+			}, {
+				
+				iconOffset: [-25,-25],
+				iconLayout: ymaps.templateLayoutFactory.createClass('<ymaps class="arrow-icon" style="transform: rotate($[properties.rotation]deg);"/>')
+			});
+
+			
+			myMap.events.add('click', function (e) {
+				//var position = e.get('coords');
+				change_geolocation(e);
+				//driver.geometry.setCoordinates(position);
+				//driver.geometry.setCoordinates(position);
+				//driver.properties.set('rotation', 30);
+			});
+			
+			var multiRoute = new ymaps.multiRouter.MultiRoute({
+				referencePoints: [
+					[56.3143, 44.07068],
+					q
+				],
+				params: {
+					routingMode: 'masstransit',
+					results:1
+				}
+			}, {
+				// Автоматически устанавливать границы карты так, чтобы маршрут был виден целиком.
+				//boundsAutoApply: true
+			});
+			
+			
+			multiRoute.model.events.add('requestsuccess', function() {
+				// Получение информации об активном маршруте.
+				var activeRoute = multiRoute.getActiveRoute();
+				// Получение коллекции путей маршрута.
+				var distance = activeRoute.getPaths().get(0).properties.get("distance").text; 
+				var duration = activeRoute.getPaths().get(0).properties.get("duration").text; 
+				//alert(distance);
+				Notification("Маршрут построен, время в пути составит "+duration+", длина маршрюта "+distance+", Ближайшая остановка – 'Медвежья долина', находится на расстоянии 130 метров");
+			});
+			// Добавляем мультимаршрут на карту.
+    		myMap.geoObjects.add(multiRoute);
+			myMap.geoObjects.add(driver);
+			setInterval(function(){
+				navigator.geolocation.getCurrentPosition(change_geolocation);
+			}, 1000);
+		}
+			
+		function change_geolocation(position){
+			//alert(123);
+			driver.geometry.setCoordinates([position.coords.latitude, position.coords.longitude]);
+			myMap.panTo(
+				// Координаты нового центра карты
+				[position.coords.latitude, position.coords.longitude], {
+					/* Опции перемещения:
+					   разрешить уменьшать и затем увеличивать зум
+					   карты при перемещении между точками 
+					*/
+					flying: true
+				}
+			)
+		}
+		
+	</script>
+	  
+	</body>
+</html>
